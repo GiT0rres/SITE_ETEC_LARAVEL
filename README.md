@@ -18,7 +18,6 @@ Sistema web desenvolvido em **Laravel 13** para gerenciamento escolar, incluindo
 
 ### 📊 Dashboard (Backend)
 - Estatísticas gerais (alunos, turmas, cursos)
-- Últimas notas lançadas
 
 ### 🔐 Autenticação
 - Sistema de login (Laravel Breeze)
