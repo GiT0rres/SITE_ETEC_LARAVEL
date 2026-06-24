@@ -115,14 +115,19 @@ Route::middleware(['auth'])->prefix('backend')->name('backend.')->group(function
     Route::put('/cursos/{curso}', [CursoController::class, 'update'])->name('cursos.update');
     Route::delete('/cursos/{curso}', [CursoController::class, 'destroy'])->name('cursos.destroy');
 
-    /*
-    |-------------------------
-    | Eventos
-    |-------------------------
-    */
-    Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');
-    Route::get('/eventos/criar', [EventoController::class, 'create'])->name('eventos.create');
-    Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
+   /*
+|-------------------------
+| Eventos
+|-------------------------
+*/
+Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');
+Route::get('/eventos/gerenciar', [EventoController::class, 'show'])->name('eventos.show');
+Route::get('/eventos/criar', [EventoController::class, 'create'])->name('eventos.create');
+Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
+Route::get('/eventos/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
+Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
+Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
+
 
 });
 

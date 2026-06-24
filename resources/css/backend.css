@@ -395,3 +395,7 @@ tbody tr:hover td { background: var(--off-white); }
     text-decoration: none;
     cursor: pointer;
 }
+nav[role="navigation"] svg {
+    width: 16px !important;
+    height: 16px !important;
+}

@@ -25,7 +25,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('backend.eventos.index') }}"
+            <a href="{{ route('backend.eventos.show') }}"
                class="{{ request()->routeIs('backend.eventos.*') ? 'active' : '' }}">
                 <span class="sidebar-icon">&#9783;</span> Eventos
             </a>

@@ -7,8 +7,12 @@
         </div>
     </a>
     <div class="topbar-user">
-        <span>Olá, {{ Auth::user()->name }}</span>
-        <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                @auth
+            <span>Olá, {{ Auth::user()->name }}</span>
+            <div class="user-avatar">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            </div>
+        @endauth
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="btn btn-outline btn-sm">Sair</button>
