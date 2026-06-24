@@ -57,4 +57,33 @@ class NotaController extends Controller
             ->route('backend.notas.index')
             ->with('success', 'Nota atualizada com sucesso!');
     }
+public function create()
+{
+    $turmas = Turma::all();
+    $alunos = \App\Models\Aluno::all();
+    return view('backend.notas.create', compact('turmas', 'alunos'));
+}
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'aluno_id'   => ['required', 'exists:alunos,id'],
+        'turma_id'   => ['required', 'exists:turmas,id'],
+        'disciplina' => ['required', 'string', 'max:100'],
+        'periodo'    => ['required', 'in:1,2,3,4'],
+        'prova1'     => ['required', 'numeric', 'min:0', 'max:10'],
+        'prova2'     => ['required', 'numeric', 'min:0', 'max:10'],
+        'trabalho'   => ['required', 'numeric', 'min:0', 'max:10'],
+    ]);
+
+    Nota::create($validated);
+
+    return redirect()->route('backend.notas.index')->with('success', 'Nota criada com sucesso!');
+}
+
+public function destroy(Nota $nota)
+{
+    $nota->delete();
+    return redirect()->route('backend.notas.index')->with('success', 'Nota excluída com sucesso!');
+}
 }

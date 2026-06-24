@@ -10,7 +10,7 @@
                 <a href="{{ route('cursos.index') }}" class="btn btn-primary btn-lg">Saiba Mais</a>
             </div>
             <div class="hero-slide-img">
-                <div class="hero-img-placeholder">Imagem do Campus<br>1200 × 700</div>
+                <img src="{{ asset('images/etec1.jpg') }}" alt="Campus ETEC Zona Leste" class="hero-img">
             </div>
         </div>
 
@@ -22,7 +22,7 @@
                 <a href="{{ route('cursos.index') }}" class="btn btn-primary btn-lg">Ver Cursos</a>
             </div>
             <div class="hero-slide-img">
-                <div class="hero-img-placeholder">Imagem de Cursos<br>1200 × 700</div>
+                <img src="{{ asset('images/etec2.jpg') }}" alt="Cursos técnicos" class="hero-img">
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                 <a href="{{ route('eventos.index') }}" class="btn btn-primary btn-lg">Ver Eventos</a>
             </div>
             <div class="hero-slide-img">
-                <div class="hero-img-placeholder">Imagem de Eventos<br>1200 × 700</div>
+                <img src="{{ asset('images/etec3.jpg') }}" alt="Eventos ETEC Zona Leste" class="hero-img">
             </div>
         </div>
 
@@ -49,20 +49,17 @@
 </section>
 
 <script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots   = document.querySelectorAll('.hero-dot');
-
-    function showSlide(n) {
-        slides[currentSlide].classList.remove('active');
-        dots[currentSlide].classList.remove('active');
-        currentSlide = (n + slides.length) % slides.length;
-        slides[currentSlide].classList.add('active');
-        dots[currentSlide].classList.add('active');
-    }
-
-    function heroSlide(dir) { showSlide(currentSlide + dir); }
-    function goToSlide(n)   { showSlide(n); }
-
-    setInterval(() => heroSlide(1), 5000);
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots   = document.querySelectorAll('.hero-dot');
+function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+}
+function heroSlide(dir) { showSlide(currentSlide + dir); }
+function goToSlide(n)   { showSlide(n); }
+setInterval(() => heroSlide(1), 5000);
 </script>

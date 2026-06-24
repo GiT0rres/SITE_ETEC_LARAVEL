@@ -25,11 +25,6 @@
         <div class="stat-value">{{ $totalCursos }}</div>
         <div class="stat-sub">disponíveis</div>
     </div>
-    <div class="stat-card">
-        <div class="stat-label">Média Geral</div>
-        <div class="stat-value">{{ number_format($mediaGeral, 1) }}</div>
-        <div class="stat-sub">pontos</div>
-    </div>
 </div>
 
 <div class="table-card">

@@ -1,7 +1,5 @@
 @extends('layouts.backend')
-
-@section('title', 'Gerenciar Notas — ETEC Zona Leste')
-
+@section('title', 'Notas — ETEC Zona Leste')
 @section('content')
 
 <div class="backend-page-header">
@@ -16,8 +14,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-{{-- FILTROS --}}
-<form action="{{ route('backend.notas.index') }}" method="GET">
+<form method="GET" action="{{ route('backend.notas.index') }}">
     <div class="filtros-bar">
         <select name="turma_id">
             <option value="">Selecione a turma</option>
@@ -30,24 +27,27 @@
 
         <select name="disciplina">
             <option value="">Selecione a disciplina</option>
-            @foreach($disciplinas as $disc)
-                <option value="{{ $disc }}" {{ request('disciplina') === $disc ? 'selected' : '' }}>
-                    {{ $disc }}
+            @foreach($disciplinas as $disciplina)
+                <option value="{{ $disciplina }}" {{ request('disciplina') == $disciplina ? 'selected' : '' }}>
+                    {{ $disciplina }}
                 </option>
             @endforeach
         </select>
 
         <select name="periodo">
             <option value="">Selecione o período</option>
-            <option value="1" {{ request('periodo') == '1' ? 'selected' : '' }}>1º Semestre</option>
-            <option value="2" {{ request('periodo') == '2' ? 'selected' : '' }}>2º Semestre</option>
+            <option value="1" {{ request('periodo') == '1' ? 'selected' : '' }}>1º Bimestre</option>
+            <option value="2" {{ request('periodo') == '2' ? 'selected' : '' }}>2º Bimestre</option>
+            <option value="3" {{ request('periodo') == '3' ? 'selected' : '' }}>3º Bimestre</option>
+            <option value="4" {{ request('periodo') == '4' ? 'selected' : '' }}>4º Bimestre</option>
         </select>
 
         <button type="submit" class="btn-filtrar">Filtrar</button>
+
+        <a href="{{ route('backend.notas.create') }}" class="btn btn-primary btn-sm">+ Nova Nota</a>
     </div>
 </form>
 
-{{-- TABELA --}}
 <div class="table-card">
     <div class="table-responsive">
         <table>
@@ -55,6 +55,8 @@
                 <tr>
                     <th>#</th>
                     <th>Aluno</th>
+                    <th>Turma</th>
+                    <th>Disciplina</th>
                     <th>Prova 1</th>
                     <th>Prova 2</th>
                     <th>Trabalho</th>
@@ -66,50 +68,33 @@
                 @forelse($notas as $i => $nota)
                     <tr>
                         <td class="td-number">{{ $notas->firstItem() + $i }}</td>
-                        <td class="td-name">{{ $nota->aluno->nome ?? '—' }}</td>
+                        <td class="td-name">{{ $nota->aluno->nome }}</td>
+                        <td>{{ $nota->turma->nome }}</td>
+                        <td>{{ $nota->disciplina }}</td>
                         <td class="td-nota">{{ number_format($nota->prova1, 1) }}</td>
                         <td class="td-nota">{{ number_format($nota->prova2, 1) }}</td>
                         <td class="td-nota">{{ number_format($nota->trabalho, 1) }}</td>
                         <td class="td-media">{{ number_format($nota->media, 1) }}</td>
                         <td>
-                            <a href="{{ route('backend.notas.edit', $nota->id) }}" class="btn-edit" title="Editar">&#9998;</a>
+                            <a href="{{ route('backend.notas.edit', $nota) }}" class="btn-edit" title="Editar">✏️</a>
+                            <form method="POST" action="{{ route('backend.notas.destroy', $nota) }}"
+                                  onsubmit="return confirm('Tem certeza que deseja excluir esta nota?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-edit" title="Excluir">🗑️</button>
+                            </form>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" style="color:var(--gray-400);text-align:center;padding:2.5rem;">
-                            Nenhuma nota encontrada para os filtros selecionados.
-                        </td>
+                        <td colspan="9">Nenhuma nota encontrada.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
+
+    {{ $notas->withQueryString()->links() }}
 </div>
-
-{{-- PAGINAÇÃO --}}
-@if($notas->hasPages())
-    <div class="pagination">
-        @if($notas->onFirstPage())
-            <span>&#8249;</span>
-        @else
-            <a href="{{ $notas->previousPageUrl() }}">&#8249;</a>
-        @endif
-
-        @foreach($notas->getUrlRange(1, $notas->lastPage()) as $page => $url)
-            @if($page == $notas->currentPage())
-                <span class="page-current">{{ $page }}</span>
-            @else
-                <a href="{{ $url }}">{{ $page }}</a>
-            @endif
-        @endforeach
-
-        @if($notas->hasMorePages())
-            <a href="{{ $notas->nextPageUrl() }}">&#8250;</a>
-        @else
-            <span>&#8250;</span>
-        @endif
-    </div>
-@endif
 
 @endsection

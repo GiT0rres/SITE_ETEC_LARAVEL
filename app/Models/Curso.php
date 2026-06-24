@@ -16,6 +16,7 @@ class Curso extends Model
         'duracao',
         'vagas',
         'ativo',
+        'imagem',
     ];
 
     protected $casts = [
