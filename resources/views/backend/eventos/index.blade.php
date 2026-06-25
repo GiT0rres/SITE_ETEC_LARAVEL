@@ -1,63 +1,150 @@
 @extends('layouts.app')
+
+/** Define o título da página */
 @section('title', 'Eventos — ETEC Zona Leste')
+
 @section('content')
-    @include('components.navbar')
+
+/** Importa a barra de navegação */
+@include('components.navbar')
+
+/** Conteúdo principal */
 
 <main class="page-section">
-    <div class="container">
 
-        <div class="page-header">
-            <h1>Eventos</h1>
-            <p>Fique por dentro dos eventos, palestras e atividades da ETEC Zona Leste.</p>
-        </div>
+```
+<div class="container">
 
-        <div class="eventos-list">
-            @forelse($eventos as $evento)
-                <div class="evento-item">
-                    <div class="evento-date">
-                        <div class="evento-date-day">
-                            {{ \Carbon\Carbon::parse($evento->data)->format('d') }}
-                        </div>
-                        <div class="evento-date-month">
-                            {{ strtoupper(\Carbon\Carbon::parse($evento->data)->translatedFormat('M')) }}
-                        </div>
-                    </div>
-                    <div class="evento-info">
-                        <h3 class="evento-title">{{ $evento->nome }}</h3>
-                        <p class="evento-desc">{{ Str::limit($evento->descricao, 120) }}</p>
-                    </div>
+    /** Cabeçalho da página */
+    <div class="page-header">
+
+        <h1>Eventos</h1>
+
+        <p>
+            Fique por dentro dos eventos, palestras e atividades da ETEC Zona Leste.
+        </p>
+
+    </div>
+
+    /** Lista de eventos */
+    <div class="eventos-list">
+
+        /** Percorre todos os eventos */
+        @forelse($eventos as $evento)
+
+        <div class="evento-item">
+
+            /** Área da data */
+            <div class="evento-date">
+
+                /** Dia */
+                <div class="evento-date-day">
+
+                    {{ \Carbon\Carbon::parse($evento->data)->format('d') }}
+
                 </div>
-            @empty
-                <p style="color:var(--gray-400)">Nenhum evento encontrado.</p>
-            @endforelse
+
+                /** Mês */
+                <div class="evento-date-month">
+
+                    {{ strtoupper(\Carbon\Carbon::parse($evento->data)->translatedFormat('M')) }}
+
+                </div>
+
+            </div>
+
+            /** Informações do evento */
+            <div class="evento-info">
+
+                /** Nome */
+                <h3 class="evento-title">
+
+                    {{ $evento->nome }}
+
+                </h3>
+
+                /** Descrição resumida */
+                <p class="evento-desc">
+
+                    {{ Str::limit($evento->descricao, 120) }}
+
+                </p>
+
+            </div>
+
         </div>
 
-        @if($eventos->hasPages())
-            <div class="pagination">
-                @if($eventos->onFirstPage())
-                    <span>&#8249;</span>
-                @else
-                    <a href="{{ $eventos->previousPageUrl() }}">&#8249;</a>
-                @endif
+        /** Caso não existam eventos */
+        @empty
 
-                @foreach($eventos->getUrlRange(1, $eventos->lastPage()) as $page => $url)
-                    @if($page == $eventos->currentPage())
-                        <span class="page-current">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}">{{ $page }}</a>
-                    @endif
-                @endforeach
+        <p style="color:var(--gray-400)">
+            Nenhum evento encontrado.
+        </p>
 
-                @if($eventos->hasMorePages())
-                    <a href="{{ $eventos->nextPageUrl() }}">&#8250;</a>
-                @else
-                    <span>&#8250;</span>
-                @endif
-            </div>
+        @endforelse
+
+    </div>
+
+    /** Paginação */
+    @if($eventos->hasPages())
+
+    <div class="pagination">
+
+        /** Página anterior */
+        @if($eventos->onFirstPage())
+
+            <span>&#8249;</span>
+
+        @else
+
+            <a href="{{ $eventos->previousPageUrl() }}">
+                &#8249;
+            </a>
+
+        @endif
+
+        /** Lista páginas */
+        @foreach($eventos->getUrlRange(1, $eventos->lastPage()) as $page => $url)
+
+            @if($page == $eventos->currentPage())
+
+                <span class="page-current">
+                    {{ $page }}
+                </span>
+
+            @else
+
+                <a href="{{ $url }}">
+                    {{ $page }}
+                </a>
+
+            @endif
+
+        @endforeach
+
+        /** Próxima página */
+        @if($eventos->hasMorePages())
+
+            <a href="{{ $eventos->nextPageUrl() }}">
+                &#8250;
+            </a>
+
+        @else
+
+            <span>&#8250;</span>
+
         @endif
 
     </div>
+
+    @endif
+
+</div>
+```
+
 </main>
 
-    @include('components.footer')
+/** Importa o rodapé */
+@include('components.footer')
+
 @endsection
