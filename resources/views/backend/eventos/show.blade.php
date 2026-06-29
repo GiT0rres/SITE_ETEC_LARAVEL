@@ -1,218 +1,85 @@
-@extends('layouts.backend')
+@extends('layouts.app')
 
-/** Define o título da página */
+{{-- Define o título da página --}}
 @section('title', 'Eventos — ETEC Zona Leste')
 
 @section('content')
 
-/** Cabeçalho da página */
-
-<div class="backend-page-header">
-
-<h1>Eventos</h1>
-
-```
-/** Navegação da página */
-```
-
-<div class="breadcrumb">
-
-<a href="{{ route('backend.dashboard') }}">
-Dashboard
-</a>
-
-<span>/</span>
-
-Eventos
-
-</div>
-
-</div>
-
-/** Exibe mensagem de sucesso */
-@if(session('success'))
-
-<div class="alert alert-success">
-
-{{ session('success') }}
-
-</div>
-
-@endif
-
-/** Área de ações */
-
-<div class="filtros-bar">
-
-```
-/** Botão para criar evento */
-```
-
-<a
-href="{{ route('backend.eventos.create') }}"
-class="btn-filtrar"
-
->
-
-* Novo Evento
-
-  </a>
-
-</div>
-
-/** Card com tabela */
-
-<div class="table-card">
-
-<div class="table-responsive">
-
-<table>
-
-```
-/** Cabeçalho */
-```
-
-<thead>
-
-<tr>
-
-<th>#</th>
-<th>Nome</th>
-<th>Data</th>
-<th>Local</th>
-<th>Vagas</th>
-<th>Ações</th>
-
-</tr>
-
-</thead>
-
-/** Corpo da tabela */
-
-<tbody>
-
-```
-/** Percorre lista de eventos */
-```
-
-@forelse($eventos as $i => $evento)
-
-<tr>
-
-```
-/** Número da linha */
-```
-
-<td class="td-number">
-
-{{ $eventos->firstItem() + $i }}
-
-</td>
-
-/** Nome */
-
-<td class="td-name">
-
-{{ $evento->nome }}
-
-</td>
-
-/** Data formatada */
-
-<td>
-
-{{ $evento->data->format('d/m/Y') }}
-
-</td>
-
-/** Local */
-
-<td>
-
-{{ $evento->local ?? '—' }}
-
-</td>
-
-/** Quantidade de vagas */
-
-<td>
-
-{{ $evento->vagas ?? '—' }}
-
-</td>
-
-/** Botões */
-
-<td>
-
-```
-/** Editar */
-```
-
-<a
-href="{{ route('backend.eventos.edit', $evento) }}"
-class="btn-edit"
-title="Editar"
-
->
-
-✏️ </a>
-
-/** Excluir */
-
-<form
-method="POST"
-action="{{ route('backend.eventos.destroy', $evento) }}"
-onsubmit="return confirm('Tem certeza que deseja excluir este evento?')"
-style="display:inline;"
->
-
-@csrf
-
-@method('DELETE')
-
-<button
-type="submit"
-class="btn-edit"
-title="Excluir"
-
->
-
-🗑️ </button>
-
-</form>
-
-</td>
-
-</tr>
-
-/** Caso não tenha registros */
-@empty
-
-<tr>
-
-<td
-colspan="6"
-style="color:var(--gray-400);text-align:center;padding:2rem;"
->
-
-Nenhum evento cadastrado.
-
-</td>
-
-</tr>
-
-@endforelse
-
-</tbody>
-
-</table>
-
-</div>
-
-/** Paginação */
-{{ $eventos->links() }}
-
-</div>
+{{-- Importa a barra de navegação --}}
+@include('components.navbar')
+
+{{-- Conteúdo principal --}}
+<main class="page-section">
+    <div class="container">
+
+        {{-- Cabeçalho da página --}}
+        <div class="page-header">
+            <h1>Eventos</h1>
+            <p>Fique por dentro dos eventos, palestras e atividades da ETEC Zona Leste.</p>
+        </div>
+
+        {{-- Lista de eventos --}}
+        <div class="eventos-list">
+            {{-- Percorre todos os eventos --}}
+            @forelse($eventos as $evento)
+            <div class="evento-item">
+                {{-- Área da data --}}
+                <div class="evento-date">
+                    {{-- Dia --}}
+                    <div class="evento-date-day">
+                        {{ \Carbon\Carbon::parse($evento->data)->format('d') }}
+                    </div>
+                    {{-- Mês --}}
+                    <div class="evento-date-month">
+                        {{ strtoupper(\Carbon\Carbon::parse($evento->data)->translatedFormat('M')) }}
+                    </div>
+                </div>
+                {{-- Informações do evento --}}
+                <div class="evento-info">
+                    {{-- Nome --}}
+                    <h3 class="evento-title">{{ $evento->nome }}</h3>
+                    {{-- Descrição resumida --}}
+                    <p class="evento-desc">{{ Str::limit($evento->descricao, 120) }}</p>
+                </div>
+            </div>
+            {{-- Caso não existam eventos --}}
+            @empty
+            <p style="color:var(--gray-400)">Nenhum evento encontrado.</p>
+            @endforelse
+        </div>
+
+        {{-- Paginação --}}
+        @if($eventos->hasPages())
+        <div class="pagination">
+            {{-- Página anterior --}}
+            @if($eventos->onFirstPage())
+                <span>&#8249;</span>
+            @else
+                <a href="{{ $eventos->previousPageUrl() }}">&#8249;</a>
+            @endif
+
+            {{-- Lista páginas --}}
+            @foreach($eventos->getUrlRange(1, $eventos->lastPage()) as $page => $url)
+                @if($page == $eventos->currentPage())
+                    <span class="page-current">{{ $page }}</span>
+                @else
+                    <a href="{{ $url }}">{{ $page }}</a>
+                @endif
+            @endforeach
+
+            {{-- Próxima página --}}
+            @if($eventos->hasMorePages())
+                <a href="{{ $eventos->nextPageUrl() }}">&#8250;</a>
+            @else
+                <span>&#8250;</span>
+            @endif
+        </div>
+        @endif
+
+    </div>
+</main>
+
+{{-- Importa o rodapé --}}
+@include('components.footer')
 
 @endsection

@@ -38,7 +38,7 @@
 
         <!-- Link para visualização e gerenciamento de eventos -->
         <li>
-            <a href="{{ route('backend.eventos.show') }}"
+            <a href="{{ route('backend.eventos.index') }}"
                class="{{ request()->routeIs('backend.eventos.*') ? 'active' : '' }}">
                 <span class="sidebar-icon">&#9783;</span> Eventos
             </a>

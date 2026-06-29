@@ -93,7 +93,7 @@
 
             <!-- Imagem relacionada aos eventos -->
             <div class="hero-slide-img">
-                <img src="{{ asset('images/etec3.jpg') }}"
+                <img src="{{ asset('images/etec3.jpeg') }}"
                      alt="Eventos ETEC Zona Leste"
                      class="hero-img">
             </div>
